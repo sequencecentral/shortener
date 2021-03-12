@@ -28,12 +28,13 @@ def index():
 @app.route('/<id>')
 def url_redirect(id):
     user_agent=request.user_agent
-    user_IP=request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+    #For IP logging:
+    # user_IP=request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     original_id = hashids.decode(id)
     if original_id:
         original_id = original_id[0]
         original_url = urls[original_id]
-        print("SHORTCUT %s ACCESSED BY %s USING %s REDIRECTS TO %s" % (id,user_IP,user_agent,original_url))
+        print("SHORTCUT %s ACCESSED USING %s REDIRECTS TO %s" % (id,user_agent,original_url))
         # print('Redirecting to decoded id',original_url)
         return redirect(original_url)
     else:
