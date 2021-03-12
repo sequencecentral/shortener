@@ -9,7 +9,6 @@ urls = []
 
 @app.route('/', methods=('GET', 'POST'))
 def index():
-    print('encoding route')
     if request.method == 'POST':
         url = request.form['url']
         if not url:
