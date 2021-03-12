@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, flash, redirect, url_for
 from datetime import datetime
 
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = datetime.now().strftime("%d%m%Y%H%M%S") #initialize at runtime
 hashids = Hashids(min_length=4, salt=app.config['SECRET_KEY'])
 urls = []
