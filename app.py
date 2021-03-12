@@ -10,26 +10,30 @@ urls = []
 @app.route('/', methods=('GET', 'POST'))
 def index():
     if request.method == 'POST':
-        url = request.form['url']
+        url = request.form['url'].lower()
         if not url:
             flash('The URL is required!')
             return redirect(url_for('index'))
         elif 'http' not in url:
             ##add http if not in url
-            url = 'http://'+url
+            url = 'https://'+url
         urls.append(url)
         hashid = hashids.encode(len(urls)-1)
         short_url = request.host_url + hashid
         return render_template('index.html', short_url=short_url)
-    return render_template('index.html')
+    else:
+        return render_template('index.html')
 
 @app.route('/<id>')
 def url_redirect(id):
+    user_agent=request.user_agent
+    user_IP=request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     original_id = hashids.decode(id)
     if original_id:
         original_id = original_id[0]
         original_url = urls[original_id]
-        print('Redirecting to decoded id',original_url)
+        print("SHORTCUT %s ACCESSED BY %s USING %s REDIRECTS TO %s" % (id,user_IP,user_agent,original_url))
+        # print('Redirecting to decoded id',original_url)
         return redirect(original_url)
     else:
         flash('Invalid URL')
